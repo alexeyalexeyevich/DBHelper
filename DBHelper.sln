@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32616.157
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DBHelperExample", "DBHelperExample\DBHelperExample.csproj", "{319010C9-027F-4FB6-A894-28CE233590C6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DBHelper", "DBHelper\DBHelper.csproj", "{BBA822C5-713C-466A-9940-005DB1FA05DB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{319010C9-027F-4FB6-A894-28CE233590C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{319010C9-027F-4FB6-A894-28CE233590C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{319010C9-027F-4FB6-A894-28CE233590C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{319010C9-027F-4FB6-A894-28CE233590C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BBA822C5-713C-466A-9940-005DB1FA05DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BBA822C5-713C-466A-9940-005DB1FA05DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BBA822C5-713C-466A-9940-005DB1FA05DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BBA822C5-713C-466A-9940-005DB1FA05DB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3A9A330E-AC88-4E8C-BE68-7F96EF2D9392}
+	EndGlobalSection
+EndGlobal
