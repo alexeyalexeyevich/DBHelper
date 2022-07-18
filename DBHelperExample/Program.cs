@@ -1,5 +1,5 @@
-﻿using System.ComponentModel;
-using DBHelper;
+﻿using DBHelper;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -7,92 +7,78 @@ internal class Program
 {
     static void Main(string[] args)
     {
+        //Create/Drop schema
+        string schemaSQL = new SqlBuilder()
+            .CreateSchema("SchemaTest")
+            .DropSchema("SchemaTest")
+            .UseMsSqlDialect() // or UsePostgresqlDialect()
+            .Build();
+        Console.WriteLine(schemaSQL);
 
-        var cb = new SqlBuilder();
-        string sqlPostgres = cb.CreateSchema("SchemaTest")
-        .CreateSequence("SequenceTest", "SchemaTest", cycle: true)
+        //Create Table
+        string createTableSQL = new SqlBuilder()
             .CreateTable<Role>()
             .CreateTable<User>()
-            .DropTable<User>()
-            .DropTable<Role>()
-            .DropSchema("SchemaTest")
-            .UsePostgresqlDialect()
+            .UseMsSqlDialect() // or UsePostgresqlDialect()
             .Build();
+        Console.WriteLine(createTableSQL);
 
-        Console.WriteLine("----------------------------------------Postgres----------------------------------------");
-        Console.WriteLine(sqlPostgres);
-        Console.WriteLine();
-        Console.WriteLine();
-
-        string mssqlPostgres = cb.CreateSchema("SchemaTest")
-            .CreateSequence("SequenceTest", "SchemaTest", cycle: true)
-            .CreateTable<Role>()
-            .CreateTable<User>()
+        //Drop Table
+        string dropTableSQL = new SqlBuilder()
             .DropTable<User>()
-            .DropTable<Role>()
-            .DropSchema("SchemaTest")
-            .UseMsSqlDialect()
+            .UseMsSqlDialect() // or UsePostgresqlDialect()
             .Build();
-        Console.WriteLine("----------------------------------------MsSql----------------------------------------");
-        Console.WriteLine(mssqlPostgres);
-        Console.ReadKey();
+        Console.WriteLine(dropTableSQL);
+
+        //Create/Drop sequence 
+        string createSequenceSQL = new SqlBuilder()
+            .CreateSequence("my_sequence", schema: "my_schema", start: 10, minvalue: 0, maxvalue: 100, incrementBy: 5, cycle: true)
+            .DropSequence("my_sequence", schema: "my_schema")
+            .UseMsSqlDialect() // or UsePostgresqlDialect()
+            .Build();
+        Console.WriteLine(createSequenceSQL);
     }
 }
 
 
-public struct aa
-{
-    public int a;
-}
 
-[Table("UserTable", Schema = "SchemaTest")]
+[Table("users")]
 public class User
 {
     [Key]
     [AutoIncrement]
     [Required]
-    [Column("id", Order = 0)]
-    public int Id { get; set; }
-    [Column("user_name", Order = 3)]
-    public string Name { get; set; }
+    [Column(Order = 0)]
+    public int id { get; set; }
 
-    [Column("user_surname", Order = 2)]
-    public string surname { get; set; }
-
-    public long column_long { get; set; }
-
-    [DefaultValue("10")]
-    public float column_float { get; set; }
-
-    [Index(true)]
-    public int column_int_unique_index { get; set; }
-
-    [Unique]
-    public int column_int_unique { get; set; }
+    [Column("user_name", Order = 1)]
+    public string name { get; set; }
 
     [MaxLength(50)]
-    public string column_string_max50 { get; set; }
+    [Unique]
+    public string email { get; set; }
 
-    public Guid column_guid { get; set; }
+    [DefaultValue(0)]
+    public int age { get; set; }
 
-    public DateTime column_datetime { get; set; }
-
-    [DBHelper.ForeignKey(typeof(Role), nameof(Role.Id))]
+    [DBHelper.ForeignKey(typeof(Role), nameof(Role.id))]
     public int role_id { get; set; }
 
     [NotMapped]
     public Role? role { get; set; }
-
 }
 
-[Table("Role", Schema = "SchemaTest")]
+[Table("roles")]
 public class Role
 {
     [Key]
     [AutoIncrement]
     [Required]
-    public int Id { get; set; }
+    public int id { get; set; }
 
-    public string? Name { get; set; }
+    [Column("role_name")]
+    public string? name { get; set; }
 
 }
+
+

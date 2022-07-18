@@ -27,6 +27,8 @@ namespace DBHelper
         ISqlBuilder UsePostgresqlDialect();
 
         ISqlBuilder UseMsSqlDialect();
+
+        ISqlBuilder Clear();
     }
 
 

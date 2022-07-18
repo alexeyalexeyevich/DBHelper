@@ -247,7 +247,7 @@ public abstract class BaseDialect : IDBDialect
                 $"       {columnDescriptor.Name} {GetDBType(columnDescriptor)} ";
 
             if (columnDescriptor.AutoIncrement)
-                result += GetAutoIncrementForColumnsSQL(columnDescriptor);
+                result += GetAutoIncrementForColumnsSQL(columnDescriptor) + " ";
 
             result += columnDescriptor.Required ? "not null" : "null";
             yield return result;

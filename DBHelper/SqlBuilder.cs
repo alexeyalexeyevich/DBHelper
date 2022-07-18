@@ -78,4 +78,11 @@ public class SqlBuilder : ISqlBuilder
         m_objects.Add(new DropSequenceDescriptor(name, schema));
         return this;
     }
+
+    public ISqlBuilder Clear()
+    {
+        m_objects = new();
+        return this;
+    }
+
 }
