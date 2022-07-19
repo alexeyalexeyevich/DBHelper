@@ -242,16 +242,36 @@ public abstract class BaseDialect : IDBDialect
     {
         foreach (ColumnSubDescriptor columnDescriptor in tableDescriptorColumns)
         {
-            //<column_definition> ::= <column_name> <data_type> [AUTOINCREMENT] [null | not null] 
-            var result =
-                $"       {columnDescriptor.Name} {GetDBType(columnDescriptor)} ";
-
-            if (columnDescriptor.AutoIncrement)
-                result += GetAutoIncrementForColumnsSQL(columnDescriptor) + " ";
-
-            result += columnDescriptor.Required ? "not null" : "null";
-            yield return result;
+            if (string.IsNullOrWhiteSpace(columnDescriptor.ComputedExpression))
+            {
+                yield return GetColumnSQL(columnDescriptor);
+            }
+            else
+            {
+                yield return GetComputedColumnSQL(columnDescriptor);
+            }
         }
+    }
+
+    protected virtual string GetColumnSQL(ColumnSubDescriptor columnDescriptor)
+    {
+        //<column_definition> ::= <column_name> <data_type> [AUTOINCREMENT] [null | not null] 
+        var result =
+            $"       {columnDescriptor.Name} {GetDBType(columnDescriptor)} ";
+
+        if (columnDescriptor.AutoIncrement)
+            result += GetAutoIncrementForColumnsSQL(columnDescriptor) + " ";
+
+        result += columnDescriptor.Required ? "not null" : "null";
+        return result;
+    }
+
+    protected virtual string GetComputedColumnSQL(ColumnSubDescriptor columnDescriptor)
+    {
+        //<column_definition> ::= <column_name> <data_type> GENERATED ALWAYS AS (<expression>) STORED
+        var result =
+            $"       {columnDescriptor.Name} {GetDBType(columnDescriptor)}  GENERATED ALWAYS AS ({columnDescriptor.ComputedExpression}) STORED";
+        return result;
     }
 
     protected virtual string GetDBType(ColumnSubDescriptor columnSubDescriptor)

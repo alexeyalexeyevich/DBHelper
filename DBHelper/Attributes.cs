@@ -32,4 +32,16 @@ public class ForeignKeyAttribute : Attribute
 
 }
 
+[AttributeUsage(AttributeTargets.Property)]
 public class AutoIncrementAttribute : Attribute { }
+
+[AttributeUsage(AttributeTargets.Property)]
+public class ComputedAttribute : Attribute
+{
+    public string Expression { get;}
+
+    public ComputedAttribute(string expression)
+    {
+        Expression = expression;
+    }
+}

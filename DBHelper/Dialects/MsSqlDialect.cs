@@ -105,4 +105,12 @@ public class MsSqlDialect : BaseDialect
         //ALTER TABLE <table_name> ADD DEFAULT '<default_value>' FOR <column_name>;
         return $"ALTER TABLE {schema}.{tableName} ADD DEFAULT '{defaultValue.DefaultValue}' FOR {defaultValue.Name} ;";
     }
+
+    protected override string GetComputedColumnSQL(ColumnSubDescriptor columnDescriptor)
+    {
+        //<column_definition> ::= <column_name> AS (<expression>) PERSISTED
+        var result =
+            $"       {columnDescriptor.Name} AS ({columnDescriptor.ComputedExpression}) PERSISTED";
+        return result;
+    }
 }

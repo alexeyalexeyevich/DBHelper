@@ -44,6 +44,8 @@ namespace DBHelper.Descriptors
 
         public string DefaultValue { get; }
 
+        public string ComputedExpression { get; }
+
         private ColumnSubDescriptor(TableDescriptor createTableDescriptor, PropertyInfo Property, Attribute[] attributes)
         {
 
@@ -111,6 +113,15 @@ namespace DBHelper.Descriptors
             var defaultValueAttribute =
                 attributes.FirstOrDefault(a => a is DefaultValueAttribute) as DefaultValueAttribute;//m_property.GetCustomAttribute<DefaultValueAttribute>();
             DefaultValue = defaultValueAttribute?.Value?.ToString();
+
+            if (attributes.FirstOrDefault(a => a is ComputedAttribute) is ComputedAttribute computedAttribute)
+            {
+                ComputedExpression = computedAttribute.Expression;
+            }
+            else
+            {
+                ComputedExpression = null;
+            }
         }
 
         public static IEnumerable<ColumnSubDescriptor> GetColumnsDescriptors(TableDescriptor createTableDescriptor)
