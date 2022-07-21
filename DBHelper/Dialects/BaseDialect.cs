@@ -50,14 +50,14 @@ public abstract class BaseDialect : IDBDialect
         return result;
     }
 
-    private string DropSequence(DropSequenceDescriptor dropSequenceDescriptor)
+    protected virtual string DropSequence(DropSequenceDescriptor dropSequenceDescriptor)
     {
         string schema = String.IsNullOrWhiteSpace(dropSequenceDescriptor.Schema) ? DefaultSchema : dropSequenceDescriptor.Schema;
         //DROP SEQUENCE IF EXISTS <sequence_name>
         return $"DROP SCHEMA IF EXISTS {schema}.{dropSequenceDescriptor.Name};";
     }
 
-    private string CreateSequence(CreateSequenceDescriptor createSequenceDescriptor)
+    protected virtual string CreateSequence(CreateSequenceDescriptor createSequenceDescriptor)
     {
         string schema = String.IsNullOrWhiteSpace(createSequenceDescriptor.Schema) ? DefaultSchema : createSequenceDescriptor.Schema;
 
@@ -153,7 +153,7 @@ public abstract class BaseDialect : IDBDialect
         }
     }
 
-    private string GetCreateIndexSQL(ColumnSubDescriptor indexSubDescriptor)
+    protected virtual string GetCreateIndexSQL(ColumnSubDescriptor indexSubDescriptor)
     {
         TableDescriptor createTableDescriptor = indexSubDescriptor.CreateTableDescriptor;
         (string tableName, string schema) = GetTableName(createTableDescriptor);

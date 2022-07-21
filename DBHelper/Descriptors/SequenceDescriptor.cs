@@ -17,7 +17,7 @@ namespace DBHelper.Descriptors
         }
     }
 
-    class CreateSequenceDescriptor : SequenceDescriptor
+    public class CreateSequenceDescriptor : SequenceDescriptor
     {
         public string DbType { get; }
         public int? Start { get; }
@@ -39,7 +39,7 @@ namespace DBHelper.Descriptors
         }
     }
 
-    class DropSequenceDescriptor : SequenceDescriptor
+    public class DropSequenceDescriptor : SequenceDescriptor
     {
         public DropSequenceDescriptor(string name, string schema) : base(name, schema)
         {
