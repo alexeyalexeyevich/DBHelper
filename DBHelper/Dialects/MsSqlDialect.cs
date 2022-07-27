@@ -41,6 +41,33 @@ public class MsSqlDialect : BaseDialect
         {typeof(XmlElement), "xml"},
     };
 
+    protected override string CreateTable(CreateTableDescriptor createTableDescriptor)
+    {
+        var sql = base.CreateTable(createTableDescriptor);
+
+        if (createTableDescriptor.IfNotExists)
+        {
+            string ifNotExists = "IF NOT EXISTS";
+            var inx = sql.IndexOf(ifNotExists);
+            if (inx != -1)
+            {
+                sql = sql.Remove(inx, ifNotExists.Length);
+                (string tableName, string schema) = GetTableName(createTableDescriptor);
+                sql = $"IF OBJECT_ID('{schema}.{tableName}', 'U') IS NULL BEGIN" + Environment.NewLine + sql + Environment.NewLine+"END";
+            }
+        }
+
+        return sql;
+    }
+
+    protected override string DropTable(DropTableDescriptor tableDescriptor)
+    {
+        (string tableName, string schema) = GetTableName(tableDescriptor);
+        string ifExists = tableDescriptor.IfExists ? $"IF OBJECT_ID('{schema}.{tableName}', 'U') IS NOT NULL " : String.Empty;
+        
+        return $"{ifExists}DROP TABLE {schema}.{tableName};";
+    }
+
     protected override string GetForeignKeyConstraintName(string tableName, string columnName, string tableNameRef, string columnNameRef)
     {
         return $"FK_{tableName}{columnName}_TO_{tableNameRef}{columnNameRef}";

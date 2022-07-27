@@ -123,7 +123,7 @@ public abstract class BaseDialect : IDBDialect
 
         string ifNotExists = createTableDescriptor.IfNotExists ? "IF NOT EXISTS " : String.Empty;
 
-        result += $"CREATE TABLE {schema}.{tableName} {ifNotExists}(" + Environment.NewLine +
+        result += $"CREATE TABLE {ifNotExists}{schema}.{tableName} (" + Environment.NewLine +
                   string.Join(", " + Environment.NewLine, columns) + Environment.NewLine +
                   ");" + Environment.NewLine;
 

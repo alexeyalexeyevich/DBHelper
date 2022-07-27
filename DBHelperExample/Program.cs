@@ -17,7 +17,7 @@ internal class Program
 
         //Create Table
         string createTableSQL = new SqlBuilder()
-            .CreateTable<Role>()
+            .CreateTable<Role>(true)
             .CreateTable<User>()
             .UseMsSqlDialect() // or UsePostgresqlDialect()
             .Build();
@@ -25,7 +25,8 @@ internal class Program
 
         //Drop Table
         string dropTableSQL = new SqlBuilder()
-            .DropTable<User>()
+            .DropTable<User>(true)
+            .DropTable<Role>()
             .UseMsSqlDialect() // or UsePostgresqlDialect()
             .Build();
         Console.WriteLine(dropTableSQL);
@@ -78,7 +79,6 @@ public class Role
 
     [Column("role_name")]
     public string? name { get; set; }
-
 }
 
 
