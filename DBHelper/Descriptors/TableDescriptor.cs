@@ -22,10 +22,12 @@ public class TableDescriptor : IObjectDescriptor
 public class CreateTableDescriptor : TableDescriptor
 {
     public IEnumerable<ColumnSubDescriptor> Columns { get; }
+    public bool IfNotExists { get; }
 
-    public CreateTableDescriptor(Type type) : base(type)
+    public CreateTableDescriptor(Type type, bool ifNotExists = false) : base(type)
     {
         Columns = ColumnSubDescriptor.GetColumnsDescriptors(this);
+        IfNotExists = ifNotExists;
     }
 }
 
@@ -39,7 +41,9 @@ public class TruncateTableDescriptor : TableDescriptor
 
 public class DropTableDescriptor : TableDescriptor
 {
-    public DropTableDescriptor(Type type) : base(type)
+    public bool IfExists { get; }
+    public DropTableDescriptor(Type type, bool ifExists) : base(type)
     {
+        IfExists = ifExists;
     }
 }

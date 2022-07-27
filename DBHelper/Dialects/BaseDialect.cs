@@ -53,8 +53,8 @@ public abstract class BaseDialect : IDBDialect
     protected virtual string DropSequence(DropSequenceDescriptor dropSequenceDescriptor)
     {
         string schema = String.IsNullOrWhiteSpace(dropSequenceDescriptor.Schema) ? DefaultSchema : dropSequenceDescriptor.Schema;
-        //DROP SEQUENCE IF EXISTS <sequence_name>
-        return $"DROP SCHEMA IF EXISTS {schema}.{dropSequenceDescriptor.Name};";
+        //DROP SEQUENCE <sequence_name>
+        return $"DROP SEQUENCE {schema}.{dropSequenceDescriptor.Name};";
     }
 
     protected virtual string CreateSequence(CreateSequenceDescriptor createSequenceDescriptor)
@@ -87,14 +87,14 @@ public abstract class BaseDialect : IDBDialect
 
     protected virtual string DropSchema(DropSchemaDescriptor dropSchemaDescriptor)
     {
-        //DROP SCHEMA IF EXISTS <schema_name>;
-        return $"DROP SCHEMA IF EXISTS {dropSchemaDescriptor.Name};";
+        //DROP SCHEMA <schema_name>;
+        return $"DROP SCHEMA {dropSchemaDescriptor.Name};";
     }
 
     protected virtual string CreateSchema(CreateSchemaDescriptor createSchemaDescriptor)
     {
-        //CREATE SCHEMA IF NOT EXISTS <schema_name>;
-        return $"CREATE SCHEMA IF NOT EXISTS {createSchemaDescriptor.Name};";
+        //CREATE SCHEMA <schema_name>;
+        return $"CREATE SCHEMA {createSchemaDescriptor.Name};";
     }
 
     protected virtual string TruncateTable(TruncateTableDescriptor truncateTableDescriptor)
@@ -107,8 +107,9 @@ public abstract class BaseDialect : IDBDialect
     protected virtual string DropTable(DropTableDescriptor tableDescriptor)
     {
         (string tableName, string schema) = GetTableName(tableDescriptor);
-        //DROP TABLE <table_name>;
-        return $"DROP TABLE {schema}.{tableName};";
+        string ifExists = tableDescriptor.IfExists ? "IF EXISTS " : String.Empty;
+        //DROP TABLE [IF EXISTS] <table_name>;
+        return $"DROP TABLE {ifExists}{schema}.{tableName};";
     }
 
     protected virtual string CreateTable(CreateTableDescriptor createTableDescriptor)
@@ -120,7 +121,9 @@ public abstract class BaseDialect : IDBDialect
         var alterTableConstraints = GetConstraintsSQL(createTableDescriptor, createTableDescriptor.Columns);
         IEnumerable<string> alterIndexes = GetIndexesSQL(createTableDescriptor.Columns);
 
-        result += $"CREATE TABLE {schema}.{tableName} (" + Environment.NewLine +
+        string ifNotExists = createTableDescriptor.IfNotExists ? "IF NOT EXISTS " : String.Empty;
+
+        result += $"CREATE TABLE {schema}.{tableName} {ifNotExists}(" + Environment.NewLine +
                   string.Join(", " + Environment.NewLine, columns) + Environment.NewLine +
                   ");" + Environment.NewLine;
 

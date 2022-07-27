@@ -14,15 +14,15 @@ public class SqlBuilder : ISqlBuilder
         return m_dialect.Build(m_objects);
     }
 
-    public ISqlBuilder CreateTable<T>()
+    public ISqlBuilder CreateTable<T>(bool ifNotExists = false)
     {
-        m_objects.Add(new CreateTableDescriptor(typeof(T)));
+        m_objects.Add(new CreateTableDescriptor(typeof(T), ifNotExists));
         return this;
     }
 
-    public ISqlBuilder DropTable<T>()
+    public ISqlBuilder DropTable<T>(bool ifExists = false)
     {
-        m_objects.Add(new DropTableDescriptor(typeof(T)));
+        m_objects.Add(new DropTableDescriptor(typeof(T), ifExists));
         return this;
     }
 

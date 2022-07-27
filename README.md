@@ -4,7 +4,7 @@
 Released Postgresql and SQL Server dialects.
 ## Create Table
 ```csharp
-ISqlBuilder CreateTable<T>();
+ISqlBuilder CreateTable<T>(bool ifNotExists = false);
 ```
 Example basic usage:
 ```csharp
@@ -39,8 +39,6 @@ CREATE TABLE public.User (
 ```
 More complex example:
 ```csharp
-
-
 [Table("users")]
 public class User
 {
@@ -129,7 +127,7 @@ ALTER TABLE public.users ALTER COLUMN age SET DEFAULT '0';
 ```
 ## Drop Table
 ```csharp
-ISqlBuilder DropTable<T>();
+ISqlBuilder DropTable<T>(bool ifExists = false);
 ```
 Example basic usage:
 ```csharp
@@ -165,8 +163,8 @@ Console.WriteLine(schemaSQL);
 ```
 Result:
 ```sql
-CREATE SCHEMA IF NOT EXISTS SchemaTest;
-DROP SCHEMA IF EXISTS SchemaTest;
+CREATE SCHEMA SchemaTest;
+DROP SCHEMA SchemaTest;
 ```
 ## Create/Drop Sequence
 ```csharp
@@ -176,14 +174,14 @@ ISqlBuilder DropSequence(string name, string schema = null);
 Example basic usage:
 ```csharp
 string createSequenceSQL = new SqlBuilder()
-                                   .CreateSequence("my_sequence", schema: "my_schema", start: 10, minvalue: 0, maxvalue: 100, incrementBy: 5, cycle: true)
-                                   .DropSequence("my_sequence", schema: "my_schema")
-                                   .UseMsSqlDialect() // or UsePostgresqlDialect()
-                                   .Build();
+            .CreateSequence("my_sequence", schema: "my_schema", start: 10, minvalue: 0, maxvalue: 100, incrementBy: 5, cycle: true)
+            .DropSequence("my_sequence", schema: "my_schema")
+            .UseMsSqlDialect() // or UsePostgresqlDialect()
+            .Build();
  Console.WriteLine(createSequenceSQL);
 ```
 Result:
 ```sql
 CREATE SEQUENCE my_schema.my_sequence START WITH 10 INCREMENT BY 5 MINVALUE 0 MAXVALUE 100 CYCLE;
-DROP SCHEMA IF EXISTS my_schema.my_sequence;
+DROP SEQUENCE my_schema.my_sequence;
 ```

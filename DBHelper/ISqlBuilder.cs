@@ -10,9 +10,9 @@ namespace DBHelper
 
         public ISqlBuilder DropSchema(string name);
 
-        ISqlBuilder CreateTable<T>();
+        ISqlBuilder CreateTable<T>(bool ifNotExists = false);
 
-        ISqlBuilder DropTable<T>();
+        ISqlBuilder DropTable<T>(bool ifExists = false);
 
         ISqlBuilder TruncateTable<T>();
 
